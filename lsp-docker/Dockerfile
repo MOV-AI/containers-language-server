@@ -1,7 +1,7 @@
 ARG VARIANT=3.9-buster
 FROM "python":${VARIANT}
 
-LABEL description="Language Server development environment"
+LABEL description="Python Language Server"
 LABEL maintaner="frontend@mov.ai"
 
 RUN apt-get update
@@ -23,5 +23,7 @@ RUN . "$NVM_DIR/nvm.sh" \
 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
- 
+
 RUN npm install --global yarn
+
+WORKDIR /opt/app

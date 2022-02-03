@@ -9,4 +9,5 @@ docker run -ti \
 --name="$APP_NAME" \
 -v $(pwd):/opt/app \
 -v ~/.ssh:/home/node/.ssh \
+--entrypoint bash \
 lsp-dev-env

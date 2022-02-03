@@ -1,7 +1,7 @@
 {
     "name": "vsc-python-${containerWorkspaceFolderBasename}",
     "build": {
-        "dockerfile": "Dockerfile",
+        "dockerfile": "../Dockerfile",
         "context": "..",
         "args": {
             "VARIANT": "3.9"

@@ -1,24 +1,25 @@
-# Example of how to connect MONACO Editor with a python language server
-
+# Monaco/Python Language Server example
 ## Instructions
 
-Build the docker image
-run ./lsp-docker/.devcontainer/build.sh
+### Build the docker image
+```
+(cd lsp-docker && ./build.sh)
+```
 
-Run a container
-run ./lsp-docker/.devcontainer/run.sh
+### Run the container
+```
+./lsp-docker/run.sh
+```
 
-Enter the contaienr
-docker exec -ti lsp-dev-env bash
-
-enter the project example folder
+### Enter the project example folder
+```
 cd monaco-languageclient/example
+```
 
-install with yarn
+### Install and run
+```
 yarn && yarn prepare && yarn start:ext
+```
 
-open the browser on localhost:3000
-you should now have a monaco editor with some json text
-remove the json text and write some python code
-
-it works!
+### Test
+After opening the browser on localhost:3000, you should have monaco editor with some content. Replace the content with some python code to test.
