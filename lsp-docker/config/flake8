@@ -1,3 +1,0 @@
-[flake8]
-buildins = count,gd,logger,msg,run,Configuration,FleetRobot,PortName,Robot,Scene,Var
-extend-ignore = E203,E501,E211

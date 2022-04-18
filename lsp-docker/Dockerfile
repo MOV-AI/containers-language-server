@@ -10,8 +10,8 @@ RUN apt-get install nano
 
 RUN python3 -m pip install --upgrade pip
 
-# RUN python3 -m pip install jedi pyflakes yapf pycodestyle flake8 pyls-flake8 python-lsp-server
-RUN python3 -m pip install jedi pyflakes yapf pycodestyle flake8 python-lsp-server
+RUN python3 -m pip install jedi pyflakes yapf pycodestyle flake8 pyls-flake8 python-lsp-server
+# RUN python3 -m pip install jedi pyflakes yapf pycodestyle flake8 python-lsp-server
 RUN python3 -m pip install 'python-lsp-server[all]'
 
 # install node
@@ -30,9 +30,3 @@ ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN npm install --global yarn
 
 WORKDIR /opt/app
-
-#add config - it is convoluted since we can't copy directly to ~/.config aparently 
-RUN mkdir ~/.config/
-COPY ./config/ /opt/config/
-RUN mv ../config/* ~/.config
-RUN rm -rf ../config
