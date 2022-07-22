@@ -10,7 +10,8 @@ RUN apt-get install nano
 
 RUN python3 -m pip install --upgrade pip
 
-RUN python3 -m pip install jedi pyflakes yapf pycodestyle python-lsp-server
+RUN python3 -m pip install jedi pyflakes yapf pycodestyle flake8 pyls-flake8 python-lsp-server
+# RUN python3 -m pip install jedi pyflakes yapf pycodestyle flake8 python-lsp-server
 RUN python3 -m pip install 'python-lsp-server[all]'
 
 # install node

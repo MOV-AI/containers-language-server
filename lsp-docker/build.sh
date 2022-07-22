@@ -1,1 +1,1 @@
-docker build . -t lsp-dev-env
+docker build . --no-cache -t lsp-dev-env
