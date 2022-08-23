@@ -2,14 +2,16 @@
  * Copyright (c) 2018 TypeFox GmbH (http://www.typefox.io). All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
-import * as ws from "ws";
-import * as http from "http";
-import * as url from "url";
-import * as net from "net";
-import * as express from "express";
 import * as rpc from "@codingame/monaco-jsonrpc";
-import { launch } from "./json-server-launcher";
 import { program } from "commander";
+import * as cors from "cors";
+import * as express from "express";
+import * as fs from "fs";
+import * as http from "http";
+import * as net from "net";
+import * as url from "url";
+import * as ws from "ws";
+import { launch } from "./json-server-launcher";
 
 program
   .option("--external")
@@ -30,6 +32,29 @@ process.on("uncaughtException", function (err: any) {
 
 // create the express application
 const app = express();
+app.use(cors());
+app.use(express.json());
+
+// set builtins post
+app.post("/builtins", (req, res) => {
+  console.log("debug request body builtins", req.body);
+  const flake8Path = `./.flake8`;
+  const builtins = req.body;
+  const flake8 = fs.readFileSync(flake8Path, {
+    encoding: "utf-8",
+  });
+  const lines = flake8.split("\n").map((line) => {
+    if (line.split("builtins").length > 1) {
+      return `builtins = ${builtins
+        .map((builtin: any) => builtin.label)
+        .join(",")}`;
+    }
+    return line;
+  });
+  fs.writeFileSync(flake8Path, lines.join("\n"));
+  res.sendStatus(200);
+});
+
 // start the server
 const server = app.listen(options.port);
 // create the web socket

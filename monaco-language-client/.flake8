@@ -1,0 +1,3 @@
+[flake8]
+builtins = gd,run,scopes,Model,Flow,Node,NodeInst,Container,Configuration,SharedDataEntry,SharedDataTemplate,TaskTemplate,TaskEntry,Annotation,Application,Form,GraphicAsset,Layout,Widget,User,Role,Callback,GraphicScene,AclObject,LdapConfig,RemoteUser,Package,Message,Ports,Task,StateMachine,Var,Robot,FleetRobot,logger,metrics,PortName,SM,Lock,print,Scene,msg,count
+extend-ignore = E203,E501,E211,W291
