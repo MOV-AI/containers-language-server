@@ -23,6 +23,5 @@ cd monaco-language-client
 ### Install and run
 
 ```
-yarn && yarn prepare && yarn start:ext -sp languageServer -p 3333
+yarn prod
 ```
-
