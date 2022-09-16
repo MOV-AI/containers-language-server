@@ -1,6 +1,8 @@
-# Monaco/Python Language Server example
+# Monaco/Python Language Server
 
 ## Instructions
+
+This Monaco/Python Language Server  will expose its API on port 3333
 
 ### Build the docker image
 
