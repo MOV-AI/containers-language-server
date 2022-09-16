@@ -26,7 +26,7 @@ RUN apt-get update && \
     nvm alias default $NODE_VERSION &&\
     nvm use default && \
     npm install -g npm@$NPM_VERSION && \
-    npm install -g yarn@YARN_VERSION &&\
+    npm install -g yarn@$YARN_VERSION &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
