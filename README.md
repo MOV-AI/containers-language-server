@@ -5,22 +5,26 @@
 ### Build the docker image
 
 ```
-(cd lsp-docker && ./build.sh)
+docker build . --no-cache -t lsp-dev-env:latest
 ```
 
 ### Run the container
 
 ```
+docker run -it lsp-dev-env:latest
+```
+
+### Develop the container application
+Edit the content of folder `./monaco-language-client` and then run :
+
+```
 ./lsp-docker/run.sh
 ```
 
-### Enter the project example folder
-
-```
-cd monaco-language-client
-```
+>  You can also edit the content of folder `./monaco-language-client` while the container is running
 
 ### Install and run
+Once inside the container's directory `/opt/app/monaco-language-client`:
 
 ```
 yarn prod
