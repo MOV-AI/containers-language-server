@@ -1,0 +1,78 @@
+name: "Build&Deploy lsp images"
+
+on:
+  # Trigger the workflow on push or pull request
+  # but only for the main branch
+  # or on tag of type v*.*.*
+  push:
+    branches:
+      - main
+      - dev
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - main
+      - dev
+  release:
+    types: [released]
+jobs:
+  lsp:
+    uses: MOV-AI/.github/.github/workflows/docker-workflow.yml@v1
+    with:
+      docker_file: Dockerfile
+      docker_image: devops/lsp
+      github_ref: ${{ github.ref }}
+      deploy: ${{ contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v')}}
+      version: ${GITHUB_REF##*/}
+      push_latest: ${{ contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v') }}
+      public: true
+      public_image: ce/lsp
+      snyk_check: true
+    secrets:
+      registry_user: ${{ secrets.PORTUS_APP_USER }}
+      registry_password: ${{ secrets.PORTUS_APP_TOKEN }}
+      pub_registry_user: ${{ secrets.PORTUS_APP_USER }}
+      pub_registry_password: ${{ secrets.PORTUS_APP_TOKEN }}
+      snyk_token: ${{ secrets.SNYK_TOKEN }}
+  extra_tagging:
+    needs: [lsp]
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_PUSH: ${{ contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v')}}
+      DOCKER_REGISTRY: registry.cloud.mov.ai
+    if: ${{ contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v')}}
+    steps:
+      - name: Login to Movai Registry
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.PORTUS_APP_USER }}
+          password: ${{ secrets.PORTUS_APP_TOKEN }}
+          registry: ${{ env.DOCKER_REGISTRY }}
+      - name: "Verify push and tag vars from env"
+        id: get_version
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          DOCKER_PUSH: ${{ env.DOCKER_PUSH }}
+        run: |
+          echo $GITHUB_REF
+          echo $DOCKER_PUSH
+          if [ "${DOCKER_PUSH}" = "true" ]; then
+            if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+              echo ::set-output name=DOCKER_TAG::latest
+            else
+              echo ::set-output name=DOCKER_TAG::${GITHUB_REF##*/}
+            fi
+          else
+            echo ::set-output name=DOCKER_TAG::local
+          fi
+      - name: Extra tags
+        run: |
+          images="lsp"
+          for img in $images; do
+            docker pull "${{ env.DOCKER_REGISTRY }}/devops/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}"
+            docker tag "${{ env.DOCKER_REGISTRY }}/devops/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}" "${{ env.DOCKER_REGISTRY }}/develop/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}"
+            docker tag "${{ env.DOCKER_REGISTRY }}/devops/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}" "${{ env.DOCKER_REGISTRY }}/qa/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}"
+            docker push "${{ env.DOCKER_REGISTRY }}/develop/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}"
+            docker push "${{ env.DOCKER_REGISTRY }}/qa/${img}:${{ steps.get_version.outputs.DOCKER_TAG }}"
+          done
