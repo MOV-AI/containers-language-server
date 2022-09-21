@@ -29,7 +29,7 @@ docker run --network=host -it lsp-dev-env:latest
 Edit the content of folder `./monaco-language-client` and then run :
 
 ```
-./lsp-dev/run.sh
+./scripts/run-dev.sh
 ```
 
 > You can also edit the content of folder `./monaco-language-client` while the container is running
