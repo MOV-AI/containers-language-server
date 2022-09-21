@@ -40,6 +40,6 @@
     "build": "yarn run compile",
     "start": "node lib/server.js",
     "start:ext": "node lib/server.js --external",
-    "prod": "yarn && yarn prepare && yarn start:ext -sp languageServer -p 3333"
+    "prod": "yarn && yarn prepare && yarn start:ext -sp lsp/languageServer -p 3333"
   }
 }
