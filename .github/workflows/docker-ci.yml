@@ -44,7 +44,7 @@ jobs:
     if: ${{ contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v')}}
     steps:
       - name: Login to Movai Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.PORTUS_APP_USER }}
           password: ${{ secrets.PORTUS_APP_TOKEN }}
